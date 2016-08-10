@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Alogorithms</title>
+    <link>https://algo-ne.github.io/study/</link>
+    <description>Recent content on Alogorithms</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ko-kr</language>
+    <lastBuildDate>Wed, 10 Aug 2016 09:46:49 +0900</lastBuildDate>
+    <atom:link href="https://algo-ne.github.io/study/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>분할 정복 &gt; 울타리 잘라내기</title>
+      <link>https://algo-ne.github.io/study/post/7_4/</link>
+      <pubDate>Wed, 10 Aug 2016 09:46:49 +0900</pubDate>
+      
+      <guid>https://algo-ne.github.io/study/post/7_4/</guid>
+      <description>
+
+&lt;h3 id=&#34;시간-및-메모리-제한&#34;&gt;시간 및 메모리 제한&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;1초 안에 프로그램 실행&lt;/li&gt;
+&lt;li&gt;64MB 이하의 메모리 사용&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;입력&#34;&gt;입력&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;첫 줄 테스트 케이스 개수 C (C &amp;lt;= 50)&lt;/li&gt;
+&lt;li&gt;다음 줄 판자의 수 N(1 &amp;lt;= N &amp;lt;= 20000)&lt;/li&gt;
+&lt;li&gt;N 개의 정수로 왼쪽부터 각 판자의 높이&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;출력&#34;&gt;출력&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;각 테스트 케이스 당 최대 직사각형 크기를 나타내는 정수 하나를 출력&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;예제-입력&#34;&gt;예제 입력&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;3
+7
+7 1 5 9 6 7 3
+7
+1 4 4 4 4 1 1
+4
+1 8 2 2
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;예제-출력&#34;&gt;예제 출력&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;20
+16
+8
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;무식하게-풀기&#34;&gt;무식하게 풀기&lt;/h3&gt;
+
+&lt;p&gt;판자 높이 배열 h[], l번 판자부터 r번 판자까지 잘라내서 사각형을 만든다고 할 때, 사각형 넓이는..&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;$$(r-l+1)×{min}↙{i=l}↖r h[i]$$&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;  public static int bruteForce(int[] h) {
+    int result = 0;
+    int length = h.length;
+    for (int left = 0; left &amp;lt; length; left++) {
+      int minHeight = h[left];
+      for (int right = left; right &amp;lt; length; right++) {
+        minHeight = Math.min(minHeight, h[right]);
+        result = Math.max(result, (right - left + 1) * minHeight);
+      }
+    }
+
+    return result;
+  }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;시간-복잡도-분석&#34;&gt;시간 복잡도 분석&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;이 알고리즘의 시간 복잡도는 $O(n^2)$&lt;/li&gt;
+&lt;li&gt;입력의 최대 크기가 20,000. 최대 크기일 때 총 400,000,000 번의 반복문 수행.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;1초 안에 프로그램을 완료 하기는 힘들어 보임.&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;분할-정복-알고리즘-설계&#34;&gt;분할 정복 알고리즘 설계&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;n 개의 판자를 절반으로 나눠 두 개의 부분 문제로 분리&lt;/li&gt;
+&lt;li&gt;최대 직사각형은 다음 중 하나에 속한다.
+
+&lt;ul&gt;
+&lt;li&gt;가장 큰 직사각형을 왼쪽 부분 문제에서 잘라낼 수 있다.&lt;/li&gt;
+&lt;li&gt;가장 큰 직사각형을 오른쪽 부분 문제에서 잘라낼 수 있다.&lt;/li&gt;
+&lt;li&gt;가장 큰 직사각형은 왼쪽과 오른쪽에 걸쳐 있다.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&#34;가장-큰-직사각형이-걸쳐있을-때&#34;&gt;가장 큰 직사각형이 걸쳐있을 때&lt;/h4&gt;
+
+&lt;ol&gt;
+&lt;li&gt;n/2 번째의 판자를 선택&lt;/li&gt;
+&lt;li&gt;오른쪽으로 판자를 확장&lt;/li&gt;
+&lt;li&gt;왼쪽으로 판자를 확장&lt;/li&gt;
+&lt;li&gt;2번과 3번 중 높이가 큰 쪽을 선택&lt;/li&gt;
+&lt;li&gt;현 상태의 넓이 계산 후 이전의 넓이보다 큰 경우 저장&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class DivideAndConquer {
+    private int[] h;
+
+    public DivideAndConquer(int[] h) {
+        this.h = h;
+    }
+
+    public int solve(int left, int right) {
+        if (left == right) {
+            return h[left];
+        }
+
+        int mid = (left + right) / 2;
+        int result = Math.max(solve(left, mid), solve(mid + 1, right));
+
+        int lo = mid, hi = mid + 1;
+        int height = Math.min(h[lo], h[hi]);
+        result = Math.max(result, height * 2);
+        while (left &amp;lt; lo || hi &amp;lt; right) {
+            if (hi &amp;lt; right &amp;amp;&amp;amp; (lo == left || h[lo - 1] &amp;lt; h[hi + 1])) {
+                hi++;
+                height = Math.min(height, h[hi]);
+            } else {
+                lo--;
+                height = Math.min(height, h[lo]);
+            }
+
+            result = Math.max(result, height * (hi - lo + 1));
+        }
+
+        return result;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;시간-복잡도-분석-1&#34;&gt;시간 복잡도 분석&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;$n$ 크기의 배열을 $2/n$ 으로 나눈 뒤 각각 해결&lt;/li&gt;
+&lt;li&gt;각 단계마다 중간에 걸친 사각형의 넓이 계산을 위한 반복문 수행
+
+&lt;ul&gt;
+&lt;li&gt;너비가 2 ~ $n$ 까지 하나하나 검사하므로 $O(n)$&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;문제를 항상 절반으로 나누어서 재귀 호출 하고 각 단계마다 $O(n)$ 시간의 처리를 하므로, 전체 시간 복잡도는 $O(nlgn)$&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;link rel=&#34;stylesheet&#34; href=&#34;http://mathscribe.com/mathscribe/jqmath-0.4.3.css&#34;&gt;
+&lt;script src=&#34;http://mathscribe.com/mathscribe/jqmath-etc-0.4.5.min.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

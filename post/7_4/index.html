@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]><html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--><html class="no-js" prefix="og: http://ogp.me/ns#" xmlns:og="http://ogp.me/ns#"><!--<![endif]-->
+
+    <head>
+                <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="author" content="">
+        <meta name="keywords" content="awesome, definitely">
+	
+        <meta property="og:site_name" content="Alogorithms">
+        <meta property="og:title" content="Alogorithms">
+        <meta property="og:url" content="https://algo-ne.github.io/study/post/7_4/">
+        <meta property="og:description" content="">
+    
+        <meta property="og:type" content="article" />
+        <meta property="og:article:author" content="" />
+        <meta property="og:article:published_time" content="2016-08-10T09:46:49&#43;09:00" />
+    
+        <meta name="generator" content="Hugo 0.16-DEV" />
+        <title>분할 정복 &gt; 울타리 잘라내기 &middot; Alogorithms </title>
+        <link rel="canonical" href="https://algo-ne.github.io/study/" />
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="">
+        <link rel="stylesheet" type='text/css' href="https://algo-ne.github.io/study/css/main.css"/>
+        <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300|Montserrat:700' rel='stylesheet' type='text/css'>
+        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+        <link rel="stylesheet" type='text/css' href="https://algo-ne.github.io/study/css/github-gist.min.css"/>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/highlight.min.js"></script>
+        <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+    </head>
+
+<body>
+<!--[if lt IE 7]><p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chrome/‎">install Google Chrome</a> to experience this site.</p><![endif]-->
+
+    <header id="site-header">
+        <div class="container">
+            <a href="https://algo-ne.github.io/study/" alt="Alogorithms"><h1 class="blog-title heading">Alogorithms</h1></a>
+            <p class="blog-description"></p>
+        </div>
+    </header>
+<main class="content" role="main">
+	<div class="container">
+		<article class="post">
+	<header class="post-header">
+        <h3 class="p-post-title">분할 정복 &gt; 울타리 잘라내기</h3>
+    </header>
+
+    <section class="post-content">
+        
+
+<h3 id="시간-및-메모리-제한">시간 및 메모리 제한</h3>
+
+<ul>
+<li>1초 안에 프로그램 실행</li>
+<li>64MB 이하의 메모리 사용</li>
+</ul>
+
+<h3 id="입력">입력</h3>
+
+<ul>
+<li>첫 줄 테스트 케이스 개수 C (C &lt;= 50)</li>
+<li>다음 줄 판자의 수 N(1 &lt;= N &lt;= 20000)</li>
+<li>N 개의 정수로 왼쪽부터 각 판자의 높이</li>
+</ul>
+
+<h3 id="출력">출력</h3>
+
+<ul>
+<li>각 테스트 케이스 당 최대 직사각형 크기를 나타내는 정수 하나를 출력</li>
+</ul>
+
+<h3 id="예제-입력">예제 입력</h3>
+
+<pre><code>3
+7
+7 1 5 9 6 7 3
+7
+1 4 4 4 4 1 1
+4
+1 8 2 2
+</code></pre>
+
+<h3 id="예제-출력">예제 출력</h3>
+
+<pre><code>20
+16
+8
+</code></pre>
+
+<h3 id="무식하게-풀기">무식하게 풀기</h3>
+
+<p>판자 높이 배열 h[], l번 판자부터 r번 판자까지 잘라내서 사각형을 만든다고 할 때, 사각형 넓이는..</p>
+
+<blockquote>
+<p>$$(r-l+1)×{min}↙{i=l}↖r h[i]$$</p>
+</blockquote>
+
+<pre><code class="language-java">  public static int bruteForce(int[] h) {
+    int result = 0;
+    int length = h.length;
+    for (int left = 0; left &lt; length; left++) {
+      int minHeight = h[left];
+      for (int right = left; right &lt; length; right++) {
+        minHeight = Math.min(minHeight, h[right]);
+        result = Math.max(result, (right - left + 1) * minHeight);
+      }
+    }
+
+    return result;
+  }
+</code></pre>
+
+<h4 id="시간-복잡도-분석">시간 복잡도 분석</h4>
+
+<ul>
+<li>이 알고리즘의 시간 복잡도는 $O(n^2)$</li>
+<li>입력의 최대 크기가 20,000. 최대 크기일 때 총 400,000,000 번의 반복문 수행.</li>
+<li><strong>1초 안에 프로그램을 완료 하기는 힘들어 보임.</strong></li>
+</ul>
+
+<h3 id="분할-정복-알고리즘-설계">분할 정복 알고리즘 설계</h3>
+
+<ul>
+<li>n 개의 판자를 절반으로 나눠 두 개의 부분 문제로 분리</li>
+<li>최대 직사각형은 다음 중 하나에 속한다.
+
+<ul>
+<li>가장 큰 직사각형을 왼쪽 부분 문제에서 잘라낼 수 있다.</li>
+<li>가장 큰 직사각형을 오른쪽 부분 문제에서 잘라낼 수 있다.</li>
+<li>가장 큰 직사각형은 왼쪽과 오른쪽에 걸쳐 있다.</li>
+</ul></li>
+</ul>
+
+<h4 id="가장-큰-직사각형이-걸쳐있을-때">가장 큰 직사각형이 걸쳐있을 때</h4>
+
+<ol>
+<li>n/2 번째의 판자를 선택</li>
+<li>오른쪽으로 판자를 확장</li>
+<li>왼쪽으로 판자를 확장</li>
+<li>2번과 3번 중 높이가 큰 쪽을 선택</li>
+<li>현 상태의 넓이 계산 후 이전의 넓이보다 큰 경우 저장</li>
+</ol>
+
+<pre><code class="language-java">public class DivideAndConquer {
+    private int[] h;
+
+    public DivideAndConquer(int[] h) {
+        this.h = h;
+    }
+
+    public int solve(int left, int right) {
+        if (left == right) {
+            return h[left];
+        }
+
+        int mid = (left + right) / 2;
+        int result = Math.max(solve(left, mid), solve(mid + 1, right));
+
+        int lo = mid, hi = mid + 1;
+        int height = Math.min(h[lo], h[hi]);
+        result = Math.max(result, height * 2);
+        while (left &lt; lo || hi &lt; right) {
+            if (hi &lt; right &amp;&amp; (lo == left || h[lo - 1] &lt; h[hi + 1])) {
+                hi++;
+                height = Math.min(height, h[hi]);
+            } else {
+                lo--;
+                height = Math.min(height, h[lo]);
+            }
+
+            result = Math.max(result, height * (hi - lo + 1));
+        }
+
+        return result;
+    }
+}
+</code></pre>
+
+<h4 id="시간-복잡도-분석-1">시간 복잡도 분석</h4>
+
+<ul>
+<li>$n$ 크기의 배열을 $2/n$ 으로 나눈 뒤 각각 해결</li>
+<li>각 단계마다 중간에 걸친 사각형의 넓이 계산을 위한 반복문 수행
+
+<ul>
+<li>너비가 2 ~ $n$ 까지 하나하나 검사하므로 $O(n)$</li>
+</ul></li>
+<li>문제를 항상 절반으로 나누어서 재귀 호출 하고 각 단계마다 $O(n)$ 시간의 처리를 하므로, 전체 시간 복잡도는 $O(nlgn)$</li>
+</ul>
+
+<p><link rel="stylesheet" href="http://mathscribe.com/mathscribe/jqmath-0.4.3.css">
+<script src="http://mathscribe.com/mathscribe/jqmath-etc-0.4.5.min.js" charset="utf-8"></script></p>
+
+    </section>
+
+    <hr>
+
+    <footer class="post-footer">
+        <section class="f-1">
+            
+            
+            <p class="f-post-time"><time datetime="2016-08-10T09:46:49&#43;09:00">August 10, 2016</time></p>
+        </section>
+                        
+        <section class="f-2">
+            <section class="share">
+                <span>Share:
+                <a class="icon-twitter" href="http://twitter.com/share?text=%eb%b6%84%ed%95%a0%20%ec%a0%95%eb%b3%b5%20%3e%20%ec%9a%b8%ed%83%80%eb%a6%ac%20%ec%9e%98%eb%9d%bc%eb%82%b4%ea%b8%b0&url=https%3a%2f%2falgo-ne.github.io%2fstudy%2fpost%2f7_4%2f"
+                    onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                    <i class="fa fa-twitter"></i>
+                </a>
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2falgo-ne.github.io%2fstudy%2fpost%2f7_4%2f"
+                    onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                    <i class="fa fa-facebook"></i>
+                </a>
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=https%3a%2f%2falgo-ne.github.io%2fstudy%2fpost%2f7_4%2f"
+                   onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+                    <i class="fa fa-google-plus"></i>
+                </a>
+                </span>
+            </section>
+
+            
+        </section>
+                        
+    </footer>
+</article>
+	</div>
+</main>
+    <footer id="site-footer">
+        <div class="container">
+            <a href="https://algo-ne.github.io/study/index.xml" title="Get the RSS feed"><span class="tooltip"><i class="fa fa-rss"></i></span></a>
+            <section>&copy; <a href="https://algo-ne.github.io/study/"></a> 2015 | All rights reserved</section>
+            <section>Theme by <a href="http://www.jrdnbwmn.com">Jordan Bowman</a>. Generated with <a href="http://gohugo.io/">Hugo</a>.</section>
+        </div>
+    </footer>
+
+    <script type="text/javascript" src="https://algo-ne.github.io/study/js/fittext.js"></script>
+    <script type="text/javascript">
+      $(".heading").fitText();
+      hljs.initHighlightingOnLoad();
+    </script>
+
+
+
+</body>
+</html>
