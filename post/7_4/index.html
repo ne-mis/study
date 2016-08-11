@@ -29,11 +29,13 @@
         <link rel="canonical" href="https://algo-ne.github.io/study/" />
         <link rel="alternate" type="application/rss+xml" title="RSS" href="">
         <link rel="stylesheet" type='text/css' href="https://algo-ne.github.io/study/css/main.css"/>
-        <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300|Montserrat:700' rel='stylesheet' type='text/css'>
+        <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300|Montserrat:700' rel='stylesheet' type='text/css'>
         <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
         <link rel="stylesheet" type='text/css' href="https://algo-ne.github.io/study/css/github-gist.min.css"/>
+        <link rel="stylesheet" href="https://algo-ne.github.io/study/css/jqmath-0.4.3.css">
         <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/highlight.min.js"></script>
         <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="https://algo-ne.github.io/study/js/jqmath-etc-0.4.5.min.js" charset="utf-8"></script>
     </head>
 
 <body>
@@ -186,7 +188,7 @@
 <h4 id="시간-복잡도-분석-1">시간 복잡도 분석</h4>
 
 <ul>
-<li>$n$ 크기의 배열을 $2/n$ 으로 나눈 뒤 각각 해결</li>
+<li>$n$ 크기의 배열을 $n/2$ 으로 나눈 뒤 각각 해결</li>
 <li>각 단계마다 중간에 걸친 사각형의 넓이 계산을 위한 반복문 수행
 
 <ul>
@@ -194,9 +196,6 @@
 </ul></li>
 <li>문제를 항상 절반으로 나누어서 재귀 호출 하고 각 단계마다 $O(n)$ 시간의 처리를 하므로, 전체 시간 복잡도는 $O(nlgn)$</li>
 </ul>
-
-<p><link rel="stylesheet" href="http://mathscribe.com/mathscribe/jqmath-0.4.3.css">
-<script src="http://mathscribe.com/mathscribe/jqmath-etc-0.4.5.min.js" charset="utf-8"></script></p>
 
     </section>
 

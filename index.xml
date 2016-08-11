@@ -148,7 +148,7 @@
 &lt;h4 id=&#34;시간-복잡도-분석-1&#34;&gt;시간 복잡도 분석&lt;/h4&gt;
 
 &lt;ul&gt;
-&lt;li&gt;$n$ 크기의 배열을 $2/n$ 으로 나눈 뒤 각각 해결&lt;/li&gt;
+&lt;li&gt;$n$ 크기의 배열을 $n/2$ 으로 나눈 뒤 각각 해결&lt;/li&gt;
 &lt;li&gt;각 단계마다 중간에 걸친 사각형의 넓이 계산을 위한 반복문 수행
 
 &lt;ul&gt;
@@ -156,9 +156,6 @@
 &lt;/ul&gt;&lt;/li&gt;
 &lt;li&gt;문제를 항상 절반으로 나누어서 재귀 호출 하고 각 단계마다 $O(n)$ 시간의 처리를 하므로, 전체 시간 복잡도는 $O(nlgn)$&lt;/li&gt;
 &lt;/ul&gt;
-
-&lt;p&gt;&lt;link rel=&#34;stylesheet&#34; href=&#34;http://mathscribe.com/mathscribe/jqmath-0.4.3.css&#34;&gt;
-&lt;script src=&#34;http://mathscribe.com/mathscribe/jqmath-etc-0.4.5.min.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
 </description>
     </item>
     
